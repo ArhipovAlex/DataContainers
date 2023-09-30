@@ -48,6 +48,12 @@ public:
 		while (Element::count) pop_front();
 		cout << "LDestructor:\t" << this << endl;
 	}
+	ForwardList(const ForwardList& a):ForwardList()
+	{
+		cout << "CopyConstructor:\t" << this << endl;
+		Element* Temp = Head;
+		while (Temp->pNext) new Element(Temp->Data, Temp->pNext);
+	}
 	//Adding elements:
 	void push_front(int Data)
 	{
@@ -135,8 +141,15 @@ public:
 		delete erased->pNext;		
 		erased->pNext = Temp;
 	}
-	//	Copy-Methods:
-
+	ForwardList& operator=(const ForwardList& a)
+	{
+		cout << "CopyAssigment:\t" << this << endl;
+		Element* Temp = Head;
+		while (Temp->pNext)
+		{
+			
+		}
+	}
 };
 
 #define BASE_CHECK
