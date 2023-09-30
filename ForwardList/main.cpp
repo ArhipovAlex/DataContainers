@@ -121,13 +121,28 @@ public:
 		delete erased->pNext;//2) Удаляем последний элемент из памяти
 		erased->pNext = 0;//3) Обнуляем указатель на последний элемент
 	}
+	void erase(int Index)
+	{
+		if (Index == 0) return pop_front();
+
+		Element* erased = Head;
+		for (int i = 0; i < Index - 1; i++)
+		{
+			if (erased->pNext == 0)return pop_back();
+			erased = erased->pNext;
+		}
+		Element* Temp = erased->pNext->pNext;
+		delete erased->pNext;		
+		erased->pNext = Temp;
+	}
+	//	Copy-Methods:
 
 };
 
-//#define BASE_CHECK
+#define BASE_CHECK
 //#define INSERT_CHECK
 //#define RANGE_BASED_FOR_ARRAY
-#define RANGE_BASED_FOR_LIST
+//#define RANGE_BASED_FOR_LIST
 void main()
 {
 	setlocale(LC_ALL, "");
@@ -141,9 +156,13 @@ void main()
 		//list.push_front(rand() % 100);
 	}
 	list.print();
-	/*list.push_front(123);
+	list.push_front(123);
 	list.print();
-	list.push_back(123);
+	int index;
+	cout << "Введите индекс удаляемого элемента: "; cin >> index;
+	list.erase(index);
+	list.print();
+	/*list.push_back(123);
 	list.print();*/
 	//list.print();
 	//list.pop_back();
