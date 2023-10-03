@@ -1,6 +1,7 @@
 ﻿#include<iostream>
 using namespace std;
-
+using std::cout;
+using std::cin;
 #define tab "\t"
 //#define DEBUG
 
@@ -88,11 +89,11 @@ class ForwardList
 	unsigned int size;
 public:
 	//type name (parameters)
-	Iterator begin()
+	const Iterator begin()const
 	{
 		return Head;
 	}
-	Iterator end()
+	const Iterator end()const
 	{
 		return nullptr;
 	}
@@ -120,9 +121,21 @@ public:
 	{
 		//this - этот список
 		//other - тот список
-		for (Element* Temp = other.Head; Temp; Temp = Temp->pNext)
-			push_back(Temp->Data);
+		/*for (Element* Temp = other.Head; Temp; Temp = Temp->pNext)
+			push_back(Temp->Data);*/
+		*this = other;
 		cout << "LConstructor:\t" << this << endl;
+	}
+	ForwardList(ForwardList&& other):ForwardList()
+	{
+		/*
+		this->Head = other.Head;
+		this->size = other.size;
+
+		other.Head = nullptr;
+		other.size = 0;*/
+		*this = std::move(other);
+		cout << "MoveConstructor:\t" << this << "<-" << &other << endl;
 	}
 	~ForwardList()
 	{
@@ -135,6 +148,26 @@ public:
 		Element* Temp = Head;
 		while (Temp->pNext) new Element(Temp->Data, Temp->pNext);
 	}*/
+	//Operators:
+	ForwardList& operator=(const ForwardList& other)
+	{
+		if (this == &other)return *this;
+		while (Head)pop_front();
+		for (Element* Temp = other.Head; Temp; Temp = Temp->pNext)
+			push_back(Temp->Data);
+		cout << "CopyAssigment:\t" << this << endl;
+		return *this;
+	}
+	ForwardList& operator=(ForwardList& other)
+	{
+		if (this == &other)return *this;
+		while (Head)pop_front();
+		this->Head = other.Head;
+		this->size = 0;
+		other.Head = nullptr;
+		other.size = 0;
+		cout << "MoveAssigment:\t" << this << "<-" << &other << endl;
+	}
 	//Adding elements:
 	void push_front(int Data)
 	{
@@ -230,21 +263,14 @@ public:
 		erased->pNext = Temp;
 		size--;
 	}
-	ForwardList& operator=(const ForwardList& a)
-	{
-#ifdef DEBUG
-		cout << "CopyAssigment:\t" << this << endl;
-#endif // DEBUG
 
-		Element* Temp = Head;
-		while (Temp->pNext)
-		{
-			
-		}
-		return *this;
-	}
 };
-
+	ForwardList operator+(const ForwardList& left, const ForwardList& right)
+	{
+		ForwardList result = left;
+		for (Iterator it = right.begin(); it != right.end(); ++it)result.push_back(*it);
+		return result;
+	}
 //#define BASE_CHECK
 //#define INSERT_CHECK
 //#define RANGE_BASED_FOR_ARRAY
@@ -321,9 +347,10 @@ void main()
 	ForwardList list1 = { 3,5,8,13,21 };
 	for (int i : list1)cout << i << tab; cout << endl;
 	
-	ForwardList list2 = list1;//Copy constructor
+	ForwardList list2 = {34,55,89};//Copy constructor
 	for (int i : list2)cout << i << tab; cout << endl;
-
+	ForwardList list3 = list1+list2;
+	for (int i : list3)cout << i << tab; cout << endl;
 #endif //COPY_METHODS_CHECK
 
 }
