@@ -1,4 +1,5 @@
 ﻿#include<iostream>
+#include<ctime>
 using namespace std;
 using std::cout;
 using std::cin;
@@ -154,7 +155,8 @@ public:
 		if (this == &other)return *this;
 		while (Head)pop_front();
 		for (Element* Temp = other.Head; Temp; Temp = Temp->pNext)
-			push_back(Temp->Data);
+			push_front(Temp->Data);
+		reverse();
 		cout << "CopyAssigment:\t" << this << endl;
 		return *this;
 	}
@@ -213,6 +215,17 @@ public:
 		size++;
 	}
 	//Methods:
+	void reverse()
+	{
+		ForwardList reverse;
+		while (Head)
+		{
+			reverse.push_front(Head->Data);
+			this->pop_front();
+		}
+		this->Head = reverse.Head;
+		reverse.Head = nullptr;
+	}
 	void print()const
 	{
 		/*
@@ -263,7 +276,6 @@ public:
 		erased->pNext = Temp;
 		size--;
 	}
-
 };
 	ForwardList operator+(const ForwardList& left, const ForwardList& right)
 	{
@@ -275,7 +287,7 @@ public:
 //#define INSERT_CHECK
 //#define RANGE_BASED_FOR_ARRAY
 //#define RANGE_BASED_FOR_LIST
-#define COPY_METHODS_CHECK
+//#define OPERATOR_PLUS_CHECK
 #define FORWARD_LIST_PREFORMANCE_TEST
 
 void main()
@@ -343,7 +355,7 @@ void main()
 	cout << endl;
 #endif //RANGE_BASED_FOR_LIST
 
-#ifdef COPY_METHODS_CHECK
+#ifdef OPERATOR_PLUS_CHECK
 	ForwardList list1 = { 3,5,8,13,21 };
 	for (int i : list1)cout << i << tab; cout << endl;
 	
@@ -351,6 +363,30 @@ void main()
 	for (int i : list2)cout << i << tab; cout << endl;
 	ForwardList list3 = list1+list2;
 	for (int i : list3)cout << i << tab; cout << endl;
-#endif //COPY_METHODS_CHECK
+#endif //OPERATOR_PLUS_CHECK
 
+#ifdef FORWARD_LIST_PREFORMANCE_TEST
+	int n;
+	cout << "Введите размер списка: "; cin >> n;
+	ForwardList list;
+	clock_t start = clock();
+	for (int i = 0; i < n; i++)
+	{
+		int value = rand() % 100;
+		//cout << value << tab;
+		list.push_front(value);
+	}
+	cout << endl;
+	//for (int i : list)cout << i << tab; cout << endl;
+	
+	clock_t end = clock();
+	cout << "Data Loaded for "<<double(end-start)/CLOCKS_PER_SEC<<endl;
+	
+	cout << "Copyng list..." << endl;
+	start = clock();
+	ForwardList list2 = list;
+	//for (int i : list2)cout << i << tab; cout << endl;
+	end = clock();
+	cout << "List copied for " << double(end - start) / CLOCKS_PER_SEC << endl;
+#endif//FORWARD_LIST_PREFORMANCE_TEST
 }
