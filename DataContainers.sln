@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ForwardList", "ForwardList\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ForwardList2", "ForwardList2\ForwardList2.vcxproj", "{D943EBCA-8C74-4125-B9F9-D0158444FA1D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ClassList2", "ClassList2\ClassList2.vcxproj", "{CDAC3E63-F4EC-491F-90AD-986A92F08EAE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -41,6 +43,14 @@ Global
 		{D943EBCA-8C74-4125-B9F9-D0158444FA1D}.Release|x64.Build.0 = Release|x64
 		{D943EBCA-8C74-4125-B9F9-D0158444FA1D}.Release|x86.ActiveCfg = Release|Win32
 		{D943EBCA-8C74-4125-B9F9-D0158444FA1D}.Release|x86.Build.0 = Release|Win32
+		{CDAC3E63-F4EC-491F-90AD-986A92F08EAE}.Debug|x64.ActiveCfg = Debug|x64
+		{CDAC3E63-F4EC-491F-90AD-986A92F08EAE}.Debug|x64.Build.0 = Debug|x64
+		{CDAC3E63-F4EC-491F-90AD-986A92F08EAE}.Debug|x86.ActiveCfg = Debug|Win32
+		{CDAC3E63-F4EC-491F-90AD-986A92F08EAE}.Debug|x86.Build.0 = Debug|Win32
+		{CDAC3E63-F4EC-491F-90AD-986A92F08EAE}.Release|x64.ActiveCfg = Release|x64
+		{CDAC3E63-F4EC-491F-90AD-986A92F08EAE}.Release|x64.Build.0 = Release|x64
+		{CDAC3E63-F4EC-491F-90AD-986A92F08EAE}.Release|x86.ActiveCfg = Release|Win32
+		{CDAC3E63-F4EC-491F-90AD-986A92F08EAE}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

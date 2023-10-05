@@ -51,6 +51,7 @@ public:
 		Element* New = new Element(Data);
 		//2) Пристековываем элемент к списку:
 		New->pNext = Head;
+		New->pPrev = Tail;
 		//3) Теперьновый элемент является начальным элементом списка:
 		Head = New;
 		size++;
@@ -60,7 +61,8 @@ public:
 		//1) Создаем элемент
 		Element* New = new Element(Data);
 		//2) Пристековываем элемент к списку:
-		New->pPrev = Tail;
+		Tail=New->pPrev;
+		New->pNext = Head;
 		//3) Теперь новый элемент является конечным элементом списка:
 		Tail = New;
 		size++;
@@ -90,6 +92,13 @@ public:
 		cout << "Количество элементов списка: " << this->size << endl;
 		cout << "Общее количество элементов списка: " << Element::count << endl;
 	}
+	void reverse_print()const
+	{
+		for (Element* Temp = Tail; Temp; Temp = Temp->pPrev)
+			cout << Temp << tab << Temp->pPrev << tab << Temp->Data << tab << Temp->pNext << endl;
+		cout << "Количество элементов списка: " << this->size << endl;
+		cout << "Общее количество элементов списка: " << Element::count << endl;
+	}
 };
 #define BASE_CHECK
 
@@ -105,6 +114,8 @@ void main()
 		//list.push_back(rand() % 100);
 		list.push_front(rand() % 100);
 	}
+	list.reverse_print();
+	cout << endl;
 	list.print();
 
 #endif//BASE_CHEKC
