@@ -62,10 +62,15 @@ public:
 		{
 			return this->Temp != other.Temp;
 		}
+		const int& operator*()const
+		{
+			return Temp->Data;
+		}
 		int& operator*()
 		{
 			return Temp->Data;
 		}
+
 	};
 	class ReverseIterator
 	{
