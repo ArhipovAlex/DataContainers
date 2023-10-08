@@ -113,6 +113,51 @@ public:
 		{
 			return Temp->Data;
 		}
+		const int operator*()const
+		{
+			return Temp->Data;
+		}
+	};
+	class ConstIterator
+	{
+		const Element* Temp;
+	public:
+		ConstIterator(Element* Temp = nullptr) :Temp(Temp) {}
+		~ConstIterator() {}
+		ConstIterator& operator++()
+		{
+			Temp = Temp->pNext;
+			return *this;
+		}
+		ConstIterator& operator++(int)
+		{
+			ConstIterator old = *this;
+			Temp = Temp->pNext;
+			return old;
+		}
+		ConstIterator& operator--()
+		{
+			Temp = Temp->pPrev;
+			return *this;
+		}
+		ConstIterator& operator--(int)
+		{
+			ConstIterator old = *this;
+			Temp = Temp->pPrev;
+			return old;
+		}
+		bool operator==(const ConstIterator& other)const
+		{
+			return this->Temp == other.Temp;
+		}
+		bool operator!=(const ConstIterator& other)const
+		{
+			return this->Temp != other.Temp;
+		}
+		const int& operator*()const
+		{
+			return Temp->Data;
+		}
 	};
 	Iterator begin() const
 	{
@@ -127,6 +172,14 @@ public:
 		return Tail;
 	}
 	ReverseIterator rend()
+	{
+		return nullptr;
+	}
+	const ConstIterator cbegin() const
+	{
+		return Head;
+	}
+	const ConstIterator cend() const
 	{
 		return nullptr;
 	}
@@ -279,7 +332,7 @@ public:
 	{
 		for (Element* Temp = Tail; Temp; Temp = Temp->pPrev)
 		{
-			cout << Temp->pPrev << tab << Temp << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
+			cout << Temp->pPrev << tab << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
 		}
 		cout << "Количество элементов списка: " << size << endl;
 	}
@@ -289,7 +342,7 @@ public:
 List operator+(const List& left, const List& right)
 {
 	List cat = left;
-	for (List::Iterator it = right.begin(); it != right.end(); ++it)
+	for (List::ConstIterator it = right.cbegin(); it != right.cend(); ++it)
 	{
 		cat.push_back((*it) *= 10);
 	}	
