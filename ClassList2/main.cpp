@@ -12,6 +12,7 @@ class List
 		int Data;
 		Element* pNext;
 		Element* pPrev;
+
 	public:
 		Element(int Data, Element* pNext = nullptr, Element* pPrev = nullptr)
 			:Data(Data), pNext(pNext), pPrev(pPrev)
