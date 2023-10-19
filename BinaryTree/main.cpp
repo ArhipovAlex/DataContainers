@@ -1,6 +1,9 @@
 #include <iostream>
+#include <ctime>
 using namespace std;
-
+using std::cin;
+using std::cout;
+using std::endl;
 
 #define tab "\t"
 
@@ -49,10 +52,18 @@ public:
 	{
 		insert(Data, Root);
 	}
+	void tree_print()const
+	{
+		tree_print(0,this->depth()*8);
+	}
 	void print()const
 	{
 		print(Root);
 		cout << endl;
+	}
+	int depth()const
+	{
+		return depth(Root);
 	}
 	int minValue()const
 	{
@@ -83,7 +94,16 @@ public:
 	{
 		erase(Data, Root);
 	}
+	void measure()const
+	{
+		return measure();
+	}
+	void depth_print(int Data)const
+	{
+		depth_print( Root,Data);
+	}
 private:
+
 	void insert(int Data, Element* Root)
 	{
 		if (this->Root == nullptr)this->Root = new Element(Data);
@@ -99,7 +119,6 @@ private:
 			else insert(Data, Root->pRight);
 		}
 	}
-
 	void clear(Element* Root)
 	{
 		if (Root == nullptr)return;
@@ -107,12 +126,51 @@ private:
 		clear(Root->pRight);
 		delete Root;
 	}
+	int depth(Element* Root)const
+	{
+		/*if (Root == nullptr)return 0;
+		if (depth(Root->pLeft) + 1 > depth(Root->pRight) + 1)return depth(Root->pLeft) + 1;
+		else return depth(Root->pRight) + 1;*/
+		//if (Root == nullptr)return 0;
+		/*return Root == nullptr ? 0 :
+			depth(Root->pLeft) + 1 > depth(Root->pRight) + 1 ?
+			depth(Root->pLeft) + 1:
+			depth(Root->pRight) + 1;*/
+		if (Root == nullptr)return 0;
+		int l_depth = depth(Root->pLeft) + 1;
+		int r_depth = depth(Root->pRight) + 1;
+		return l_depth > r_depth ? l_depth : r_depth;
+	}
+	void depth_print(Element* Root, int depth, int width=8)const
+	{
+		if (Root == nullptr)return;
+		if (depth == 0)
+		{
+			cout.width(width);
+			cout << Root->Data << tab;
+			return;
+		}
+		depth_print(Root->pLeft, depth -1, width);
+		cout.width(width); cout << "";
+		depth_print(Root->pRight, depth -1, width);
+
+	}
 	void print(Element* Root)const
 	{
 		if (Root == nullptr)return;
 		print(Root->pLeft);
 		cout << Root->Data << tab;
 		print(Root->pRight);
+	}
+
+	void tree_print(int depth, int width)const
+	{
+		if (depth == this->depth()) return;
+		depth_print(this->Root,depth,width);
+		cout << endl;
+		cout << endl;
+		cout << endl;
+		tree_print(depth + 1, width/2);
 	}
 	void erase(int Data, Element*& Root)
 	{
@@ -192,28 +250,77 @@ public:
 	}
 };
 
+template <typename T> void measure(const char msg[],T(Tree::*function)()const, const Tree& tree)
+{
+	cout << msg;
+	clock_t start = clock();
+	T value = (tree.*function)();
+	clock_t end = clock();
+	cout << value<<", вычислено за " << double(end - start) / CLOCKS_PER_SEC << " секунд" << endl;
+}
+
 #define BASE_CHECK
+//#define PREFORMANCE_CHECK_1
 //#define UNIQUE_CHECK
-#define ERASE_CHECK
+//#define ERASE_CHECK
+//#define DEPTH_CHECK
 
 void main()
 {
 	setlocale(LC_ALL, "");
 #ifdef BASE_CHECK
-	int n;
-	cout << "Введите размер дерева: "; cin >> n;
-	Tree tree;
-	for (int i = 0; i < n; i++)
-	{
-		tree.insert(rand() % 10);
-	}
-	tree.print();
+	//int n;
+	//cout << "Введите размер дерева: "; cin >> n;
+	//Tree tree;
+	//for (int i = 0; i < n; i++)
+	//{
+	//	tree.insert(rand() % 100);
+	//}
+	Tree tree = { 50,25,76,16,32,64,90,15,91,98 };
+	tree.tree_print();
+	//cout << endl;
+#ifdef PREFORMANCE_CHECK_1
+	clock_t start = clock();//возвращает кол-во тактов процессора
+	cout << "Минимальное значение в дереве: " << tree.minValue() << ", вычислено за ";
+	clock_t end = clock();
+	cout << double(end - start) / CLOCKS_PER_SEC << " секунд" << endl;
+
+	start = clock();
+	cout << "Максимальное значение в дереве: " << tree.maxValue() << ", вычислено за ";
+	end = clock();
+	cout << double(end - start) / CLOCKS_PER_SEC << " секунд" << endl;
+	
+	start = clock();
+	cout << "Сумма элементов дерева: " << tree.sum() << ", вычислено за ";
+	end = clock();
+	cout << double(end - start) / CLOCKS_PER_SEC << " секунд" << endl;
+	
+	start = clock();
+	cout << "Количество элементов дерева: " << tree.count() << ", вычислено за ";
+	end = clock();
+	cout << double(end - start) / CLOCKS_PER_SEC << " секунд" << endl;
+	
+	start = clock();
+	cout << "Среднее арифметическое элементов дерева: " << tree.avg() << ", вычислено за ";
+	end = clock();
+	cout << double(end - start) / CLOCKS_PER_SEC << " секунд" << endl;
+	
+	start = clock();
+	cout << "Глубина дерева: " << tree.depth() << ", вычислено за ";
+	end = clock();
+	cout << double(end - start) / CLOCKS_PER_SEC << " секунд" << endl;
+#endif //PREFORMANCE_CHECK_1
+	measure("Минимальное значение в дереве: ", &Tree::minValue, tree);
+	measure("Максимальное значение в дереве: ", &Tree::maxValue, tree);
+	measure("Сумма элементов дерева: ", &Tree::sum, tree);
+	measure("Количество элементов дерева: ", &Tree::count, tree);
+	measure("Среднее арифметическое элементов дерева: ", &Tree::avg, tree);
+	measure("Глубина дерева: ", &Tree::depth, tree);
+	int value;
+	//cout << "Введите глубину уровня: "; cin >> value;
+	//cout << "Элементы на уровне: ";
+	//tree.depth_print(value);
 	cout << endl;
-	cout << "Минимальное значение в дереве: " << tree.minValue() << endl;
-	cout << "Максимальное значение в дереве: " << tree.maxValue() << endl;
-	cout << "Сумма элементов дерева: " << tree.sum() << endl;
-	cout << "Количество элементов дерева: " << tree.count() << endl;
-	cout << "Среднее арифметическое элементов дерева: " << tree.avg() << endl;
 #endif //BASE_CHECK
 
 #ifdef UNIQUE_CHECK
@@ -243,5 +350,15 @@ void main()
 	tree.print();
 	cout << endl;
 #endif //ERASE_CHECK
+
+#ifdef DEPTH_CHECK
+	Tree tree = 
+	{ 
+					50,
+			25,				75,
+		16,		32,		64,		90 
+	};
+	cout << "Глубина дерева: " << tree.depth() << endl;
+#endif //DEPTH_CHECK
 
 }
