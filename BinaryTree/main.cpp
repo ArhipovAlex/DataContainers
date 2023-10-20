@@ -1,6 +1,8 @@
 #include <iostream>
 #include <ctime>
+#include <chrono>
 using namespace std;
+using namespace chrono;
 using std::cin;
 using std::cout;
 using std::endl;
@@ -98,6 +100,10 @@ public:
 	{
 		return measure();
 	}
+	void chrono_measure()
+	{
+		return chrono_measure();
+	}
 	void depth_print(int Data)const
 	{
 		depth_print( Root,Data);
@@ -162,7 +168,6 @@ private:
 		cout << Root->Data << tab;
 		print(Root->pRight);
 	}
-
 	void tree_print(int depth, int width)const
 	{
 		if (depth == this->depth()) return;
@@ -259,8 +264,21 @@ template <typename T> void measure(const char msg[],T(Tree::*function)()const, c
 	cout << value<<", вычислено за " << double(end - start) / CLOCKS_PER_SEC << " секунд" << endl;
 }
 
+template <typename T> void chrono_measure(const char msg[], T(Tree::* function)()const, const Tree& tree)
+{
+	cout << msg;
+	system_clock::time_point start = system_clock::now();
+	T value = (tree.*function)();
+	system_clock::time_point end = system_clock::now();
+	duration<double> sec = end - start;
+	cout.setf(ios::fixed);  // вывод в фиксированном формате 
+	cout.precision(6);      // вывод до 6 знака после точки, включительно
+	cout << value << ", вычислено за " << sec.count() << " секунд" << endl;
+}
 #define BASE_CHECK
 //#define PREFORMANCE_CHECK_1
+//#define MEASURE_CHECK
+#define CHRONO_CHECK
 //#define UNIQUE_CHECK
 //#define ERASE_CHECK
 //#define DEPTH_CHECK
@@ -310,6 +328,8 @@ void main()
 	end = clock();
 	cout << double(end - start) / CLOCKS_PER_SEC << " секунд" << endl;
 #endif //PREFORMANCE_CHECK_1
+
+#ifdef MEASURE_CHECK
 	measure("Минимальное значение в дереве: ", &Tree::minValue, tree);
 	measure("Максимальное значение в дереве: ", &Tree::maxValue, tree);
 	measure("Сумма элементов дерева: ", &Tree::sum, tree);
@@ -321,6 +341,17 @@ void main()
 	//cout << "Элементы на уровне: ";
 	//tree.depth_print(value);
 	cout << endl;
+#endif //CHRONO_CHECK
+
+#ifdef CHRONO_CHECK
+	chrono_measure("Минимальное значение в дереве: ", &Tree::minValue, tree);
+	chrono_measure("Максимальное значение в дереве: ", &Tree::maxValue, tree);
+	chrono_measure("Сумма элементов дерева: ", &Tree::sum, tree);
+	chrono_measure("Количество элементов дерева: ", &Tree::count, tree);
+	chrono_measure("Среднее арифметическое элементов дерева: ", &Tree::avg, tree);
+	chrono_measure("Глубина дерева: ", &Tree::depth, tree);
+#endif //CHRONO_CHECK
+
 #endif //BASE_CHECK
 
 #ifdef UNIQUE_CHECK
