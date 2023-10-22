@@ -64,6 +64,10 @@ public:
 		print(Root);
 		cout << endl;
 	}
+	void balance()
+	{
+		balance(this->Root);
+	}
 	int depth()const
 	{
 		return depth(Root);
@@ -156,7 +160,7 @@ private:
 			cout << string(pow(2,width), '  ');
 			cout << "  ";
 			cout << string(pow(2, width)-2, '  ');
-			if (depth != 0)
+			if (depth > 0)
 			{
 				cout << string(pow(2, width), '  ');
 				cout << "  ";
@@ -200,7 +204,28 @@ private:
 		cout << endl;
 		tree_print(depth + 1, width);
 	}
-
+	void balance(Element* Root)
+	{
+		if (Root == nullptr)return;
+		if (abs(count(Root->pLeft) - count(Root->pRight)) < 2)return;
+		if (count(Root->pLeft) > count(Root->pRight))
+		{
+			if (Root->pRight == nullptr)Root->pRight = new Element(Root->Data);
+			else insert(Root->Data, Root->pRight);
+			Root->Data = maxValue(Root->pLeft);
+			erase(maxValue(Root->pLeft), Root->pLeft);
+		}
+		else
+		{
+			if (Root->pLeft == nullptr)Root->pLeft = new Element(Root->Data);
+			else insert(Root->Data, Root->pLeft);
+			Root->Data = minValue(Root->pRight);
+			erase(minValue(Root->pRight), Root->pRight);
+		}
+		balance(Root->pLeft);
+		balance(Root->pRight);
+		balance(Root);
+	}
 	void erase(int Data, Element*& Root)
 	{
 		if (Root == nullptr)return;	
@@ -299,13 +324,14 @@ template <typename T> void chrono_measure(const char msg[], T(Tree::* function)(
 	cout.precision(8);      // вывод до 6 знака после точки, включительно
 	cout << value << ", вычислено за " << sec.count() << " секунд" << endl;
 }
-#define BASE_CHECK
+//#define BASE_CHECK
 //#define PREFORMANCE_CHECK_1
 //#define MEASURE_CHECK
-#define CHRONO_CHECK
+//#define CHRONO_CHECK
 //#define UNIQUE_CHECK
 //#define ERASE_CHECK
 //#define DEPTH_CHECK
+#define BALANCE_CHECK
 
 void main()
 {
@@ -425,4 +451,10 @@ void main()
 	cout << "Глубина дерева: " << tree.depth() << endl;
 #endif //DEPTH_CHECK
 
+#ifdef BALANCE_CHECK
+	Tree tree = { 55,34,21,13,8,5,3};
+	tree.tree_print();
+	tree.balance();
+    tree.tree_print();
+#endif //BALANCE_CHECK
 }
