@@ -200,6 +200,7 @@ private:
 		cout << endl;
 		tree_print(depth + 1, width);
 	}
+
 	void erase(int Data, Element*& Root)
 	{
 		if (Root == nullptr)return;	
