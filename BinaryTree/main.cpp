@@ -267,12 +267,12 @@ template <typename T> void measure(const char msg[],T(Tree::*function)()const, c
 template <typename T> void chrono_measure(const char msg[], T(Tree::* function)()const, const Tree& tree)
 {
 	cout << msg;
-	system_clock::time_point start = system_clock::now();
+	high_resolution_clock::time_point start = high_resolution_clock::now();
 	T value = (tree.*function)();
-	system_clock::time_point end = system_clock::now();
+	high_resolution_clock::time_point end = high_resolution_clock::now();
 	duration<double> sec = end - start;
 	cout.setf(ios::fixed);  // вывод в фиксированном формате 
-	cout.precision(6);      // вывод до 6 знака после точки, включительно
+	cout.precision(7);      // вывод до 6 знака после точки, включительно
 	cout << value << ", вычислено за " << sec.count() << " секунд" << endl;
 }
 #define BASE_CHECK
