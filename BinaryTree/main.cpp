@@ -6,6 +6,7 @@ using namespace chrono;
 using std::cin;
 using std::cout;
 using std::endl;
+using std::string;
 
 #define tab "\t"
 
@@ -56,7 +57,7 @@ public:
 	}
 	void tree_print()const
 	{
-		tree_print(0,this->depth()*8);
+		tree_print(0,this->depth());
 	}
 	void print()const
 	{
@@ -147,19 +148,37 @@ private:
 		int r_depth = depth(Root->pRight) + 1;
 		return l_depth > r_depth ? l_depth : r_depth;
 	}
-	void depth_print(Element* Root, int depth, int width=8)const
+	void depth_print(Element* Root, int depth, int width=4)const
 	{
-		if (Root == nullptr)return;
-		if (depth == 0)
+		if (Root == nullptr)
 		{
-			cout.width(width);
-			cout << Root->Data << tab;
+			//*cout.width(width);	
+			cout << string(pow(2,width), '  ');
+			cout << "  ";
+			cout << string(pow(2, width)-2, '  ');
+			if (depth != 0)
+			{
+				cout << string(pow(2, width), '  ');
+				cout << "  ";
+				cout << string(pow(2, width)-2, '  ');
+			}
 			return;
 		}
+		if (depth == 0)
+		{
+			//*cout.width(width); cout << "";
+			cout << string(pow(2, width), '  ');
+			cout <<Root->Data;
+			//*cout.width(width);	cout << "";
+			cout << string(pow(2, width)-2, '  ');
+			return;
+		}
+		
 		depth_print(Root->pLeft, depth -1, width);
-		cout.width(width); cout << "";
+		//cout.width(width); cout << "";
 		depth_print(Root->pRight, depth -1, width);
-
+		//cout << "  ";
+		//cout.width(width); cout << "";
 	}
 	void print(Element* Root)const
 	{
@@ -170,12 +189,16 @@ private:
 	}
 	void tree_print(int depth, int width)const
 	{
-		if (depth == this->depth()) return;
-		depth_print(this->Root,depth,width);
+
+		if (depth == this->depth()) 
+		{
+			//cout.width(width); cout << "";
+			return;
+		}
+		depth_print(this->Root,depth,width - depth);
 		cout << endl;
 		cout << endl;
-		cout << endl;
-		tree_print(depth + 1, width/2);
+		tree_print(depth + 1, width);
 	}
 	void erase(int Data, Element*& Root)
 	{
@@ -272,7 +295,7 @@ template <typename T> void chrono_measure(const char msg[], T(Tree::* function)(
 	high_resolution_clock::time_point end = high_resolution_clock::now();
 	duration<double> sec = end - start;
 	cout.setf(ios::fixed);  // вывод в фиксированном формате 
-	cout.precision(7);      // вывод до 6 знака после точки, включительно
+	cout.precision(8);      // вывод до 6 знака после точки, включительно
 	cout << value << ", вычислено за " << sec.count() << " секунд" << endl;
 }
 #define BASE_CHECK
@@ -287,16 +310,25 @@ void main()
 {
 	setlocale(LC_ALL, "");
 #ifdef BASE_CHECK
-	//int n;
-	//cout << "¬ведите размер дерева: "; cin >> n;
-	//Tree tree;
-	//for (int i = 0; i < n; i++)
-	//{
-	//	tree.insert(rand() % 100);
-	//}
-	Tree tree = { 50,25,76,16,32,64,90,15,91,98 };
+	/*
+	int n;
+	cout << "¬ведите размер дерева: "; cin >> n;
+	Tree tree;
+	for (int i = 0; i < n; i++)
+	{
+		tree.insert(rand() % 100);
+	}
+	*/
+	Tree tree = { 50,25,76,16,32,64,90,15,17,91,98 };
 	tree.tree_print();
-	//cout << endl;
+	cout << endl;
+	
+	/*
+	int value;
+	cout << "¬ведите глубину уровн€: "; cin >> value;
+	cout << "Ёлементы на уровне: ";
+	tree.depth_print(value);
+	cout << endl;*/
 #ifdef PREFORMANCE_CHECK_1
 	clock_t start = clock();//возвращает кол-во тактов процессора
 	cout << "ћинимальное значение в дереве: " << tree.minValue() << ", вычислено за ";
